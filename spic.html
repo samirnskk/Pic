@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Image Generator by SAMIR</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: "Courier New", monospace;
+            background-color: #1e1e1e;
+            color: #00FF00;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #00FF00;
+            text-shadow: 0 0 8px #00FF00;
+            margin-top: 20px;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #fff;
+        }
+
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #000;
+            color: #00FF00;
+            border: 1px solid #00FF00;
+            box-shadow: 0 0 5px #00FF00;
+        }
+
+        button, .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #00FF00;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #00FF00;
+            text-decoration: none;
+        }
+
+        button:hover, .btn:hover {
+            background-color: #45a049;
+            box-shadow: 0 0 20px #00FF00;
+        }
+
+        #responseContainer {
+            margin-top: 20px;
+            color: #00FF00;
+            font-weight: bold;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 90%;
+            height: auto;
+            border: 2px solid #00FF00;
+            box-shadow: 0 0 10px #00FF00;
+        }
+
+        /* Telegram Button */
+        .telegram-btn {
+            background-color: #0088cc;
+            color: white;
+            box-shadow: 0 0 10px #0088cc;
+        }
+
+        .telegram-btn:hover {
+            background-color: #007bb5;
+            box-shadow: 0 0 20px #0088cc;
+        }
+
+        /* Download Button */
+        #downloadBtn {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 TEXT TO IMAGE GENERATOR BY SAMIR🔥</h1>
+    <p>Enter your message below to generate an Image:</p>
+    <textarea id="messageInput" placeholder="Enter your text here..."></textarea><br>
+    <button id="submitBtn">Generate an image!</button>
+    <button id="telegram">@Drnskk</button>
+
+    <div id="responseContainer">Waiting for input...</div>
+    <div id="outputContainer"></div>
+    <a id="downloadBtn" href="#" download="generated_image.png" class="btn">Download Image</a>
+    
+    <!-- Telegram Button -->
+    <a href="https://www.facebook.com/aris.andrian.999517"target="_blank" class="btn telegram-btn">contact telegram id</a>
+
+    <script>
+        const submitBtn = document.getElementById("submitBtn");
+        const responseContainer = document.getElementById("responseContainer");
+        const outputContainer = document.getElementById("outputContainer");
+        const downloadBtn = document.getElementById("downloadBtn");
+
+        submitBtn.addEventListener("click", async () => {
+            const message = document.getElementById("messageInput").value;
+
+            if (!message) {
+                alert("Please enter a message!");
+                return;
+            }
+
+            responseContainer.innerHTML = "🔍 Generating image... Please wait!";
+            outputContainer.innerHTML = "";
+            downloadBtn.style.display = "none"; // Hide download button initially
+
+            try {
+                // API Endpoint
+                const apiUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(message)}`;
+
+                // Fetch API response
+                const response = await fetch(apiUrl, {
+                    method: "GET"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to generate content. Please try again.");
+                }
+
+                // Display the generated image
+                const imageUrl = response.url;
+                console.log("Generated Image URL:", imageUrl);
+
+                responseContainer.innerHTML = "✅ Image Generated Successfully!";
+                outputContainer.innerHTML = `
+                    <img id="generatedImage" src="${imageUrl}" alt="Generated Content" />
+                `;
+
+                // Update download button
+                downloadBtn.href = imageUrl;
+                downloadBtn.style.display = "inline-block";
+            } catch (error) {
+                console.error("Error:", error);
+                responseContainer.innerHTML = `❌ An error occurred: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
